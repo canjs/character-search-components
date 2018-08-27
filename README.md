@@ -6,10 +6,16 @@ Components for a Search / List / Details flow for Rick & Morty characters built 
 
 Character Search Page
 
+[Demo](https://canjs.github.io/character-search-components/demos/search.html)
+
 ## <character-list>
 
 Characters List Page
 
+[Demo](https://canjs.github.io/character-search-components/demos/list.html)
+
 ## <character-details>
 
 Character Details Page
+
+[Demo](https://canjs.github.io/character-search-components/demos/details.html)
