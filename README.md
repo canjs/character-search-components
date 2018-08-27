@@ -1,5 +1,7 @@
 # character-search-components
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/canjs/character-search-components.svg)](https://greenkeeper.io/)
+
 Components for a Search / List / Details flow for Rick & Morty characters built with CanJS 5
 
 ## <character-search>
