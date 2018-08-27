@@ -73,7 +73,7 @@ character-list-page li p {
 `;
 document.body.appendChild(styles);
 
-const ListPage = Component.extend({
+export default Component.extend({
   tag: "character-list-page",
 
   view: `

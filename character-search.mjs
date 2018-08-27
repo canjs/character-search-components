@@ -29,7 +29,7 @@ character-search-page a:hover {
 `;
 document.body.appendChild(styles);
 
-const SearchPage = Component.extend({
+export default Component.extend({
 	tag: "character-search-page",
 
 	view: `

@@ -2,7 +2,7 @@
   "name": "character-search-components",
   "version": "5.0.0",
   "description": "Components for a Search / List / Details flow for Rick & Morty characters built with CanJS 5",
-  "main": "index.js",
+  "main": "components.mjs",
   "repository": {
     "type": "git",
     "url": "git@github.com:canjs/character-search-components.git",
