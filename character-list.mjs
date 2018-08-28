@@ -3,24 +3,20 @@ import { Component } from "//unpkg.com/can@5/core.mjs";
 const styles = document.createElement("style");
 styles.innerHTML = `
 character-list-page {
-  margin: 0 3em;
+  margin: 0;
+  padding: 0;
 }
 character-list-page .wrapper {
   margin: 0 3em;
 }
-character-list-page .results {
-  background-color: #00a1b7;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 20px 3em;
-  text-align: center;
+character-list-page .pagination {
   color: #fef979;
   text-shadow: 2px 2px 0 #000;
 }
-character-list-page .results span {
+character-list-page .pagination span {
   letter-spacing: 8px;
 }
-character-list-page .results button {
+character-list-page .pagination button {
   font-family: 'Permanent Marker', cursive;
   padding: 3px 6px;
   border: none;
@@ -31,7 +27,15 @@ character-list-page .results button {
   vertical-align: middle;
   text-shadow: 2px 2px 0 #000;
 }
-character-list-page .results button:hover {
+character-list-page .pagination button:disabled {
+  color: #000;
+  text-shadow: none;
+}
+character-list-page .pagination button:disabled:hover {
+  color: #000;
+  cursor: default;
+}
+character-list-page .pagination button:hover {
   color: #fff;
   cursor: pointer;
 }
@@ -47,10 +51,10 @@ character-list-page li {
   background-color: #00a1b7;
   border-radius: 10px;
   margin: 20px;
-  padding: 25px;
+  padding: 25px 25px 0 25px;
   list-style: none;
   display: flex;
-  width: 300px;
+  width: 210px;
 }
 character-list-page li:hover {
   background-color: #0097ac;
@@ -65,6 +69,7 @@ character-list-page li img {
   border-radius: 10px;
 }
 character-list-page li p {
+  font-size: 26px;
   padding: 10px;
   margin: 0 auto 15px auto;
   text-align: center;
@@ -77,7 +82,16 @@ export default Component.extend({
   tag: "character-list-page",
 
   view: `
-    <a href="{{ routeUrl(page="search" query=query) }}" class="search">&lt; Search</a>
+    <div class="breadcrumbs">
+      <div>
+        <a href="{{ routeUrl(page="search" query=query) }}" class="search">&lt; Search</a>
+      </div>
+      <div class="pagination">
+        <button on:click="goBack()" {{# unless(canGoBack) }}disabled{{/ unless }}>&lt; </button>
+        <span>Results {{startIndex}} - {{endIndex}} of {{characterCount}}</span>
+        <button on:click="goForward()" {{# unless(canGoForward) }}disabled{{/ unless }}>&gt;</button>
+      </div>
+    </div>
 
     <div class="wrapper">
       {{# if(charactersPromise.isPending) }}
@@ -97,12 +111,6 @@ export default Component.extend({
         </ul>
       {{/ if }}
     </div>
-
-    <p class="results">
-      <button on:click="goBack()" {{# unless(canGoBack) }}disabled{{/ unless }}>&lt; </button>
-      <span>{{startIndex}} - {{endIndex}} of {{characterCount}}</span>
-      <button on:click="goForward()" {{# unless(canGoForward) }}disabled{{/ unless }}>&gt;</button>
-    </p>
   `,
 
   ViewModel: {

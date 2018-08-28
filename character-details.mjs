@@ -6,7 +6,7 @@ character-details-page {
   margin: 0 3em;
 }
 character-details-page .character-details {
-  margin: .5em 3em 1em 3em;
+  margin: 1em 3em;
   text-align: center;
   background-color: #00a1b7;
   border: 20px solid #00a1b7;
@@ -19,14 +19,20 @@ character-details-page .character-details img {
   border-radius: 6px;
 }
 character-details-page .character-details h2 {
+  font-size: 1.3em;
   color: #fff;
   text-shadow: 3px 4px 0 #000;
   letter-spacing: 8px;
+  margin-top: 0;
 }
 character-details-page .character-details p {
   color: #fff;
   text-shadow: 2px 2px 0 #000;
   letter-spacing: 3px;
+}
+character-details-page .character-details p span {
+  color: #000;
+  text-shadow: none;
 }
 `;
 document.body.appendChild(styles);
@@ -35,7 +41,11 @@ export default Component.extend({
   tag: "character-details-page",
 
   view: `
-    <a href="{{ routeUrl(page="list" query=query)}}" class="search">&lt; Characters</a>
+    <div class="breadcrumbs">
+      <div>
+        <a href="{{ routeUrl(page="list" query=query)}}" class="search">&lt; Characters</a>
+      </div>
+    </div>
 
     {{# if(characterPromise.isPending) }}
       <div class="loading">Loading...</div>
@@ -46,10 +56,10 @@ export default Component.extend({
         {{# with(characterPromise.value) }}
           <h2>{{name}}</h2>
           <img src="{{image}}" alt="{{name}}"/>
-          <p>Status: {{status}}</p>
-          <p>Species: {{species}}</p>
-          <p>Location: {{location.name}}</p>
-          <p>Type: {{# if(type) }}{{type}}{{ else }}Unknown{{/ if }}</p>
+          <p><span>Status:</span> {{status}}</p>
+          <p><span>Species:</span> {{species}}</p>
+          <p><span>Location:</span> {{location.name}}</p>
+          <p><span>Type:</span> {{# if(type) }}{{type}}{{ else }}Unknown{{/ if }}</p>
         {{/ with }}
       </div>
     {{/ if }}

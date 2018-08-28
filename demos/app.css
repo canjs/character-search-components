@@ -11,9 +11,17 @@ a {
   text-decoration: none;
   color: #000;
 }
+.breadcrumbs {
+  display: flex;
+  justify-content: space-between;
+  background-color: #00a1b7;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 3em;
+  text-align: center;
+}
 .search {
   text-decoration: none;
-  font-size: 80%;
   letter-spacing: 3px;
   color: #000;
   white-space: nowrap;
@@ -38,7 +46,8 @@ character-search-app {
   margin: 1em 3em;
 }
 character-search-app h1 {
-  margin: 0 auto .5em auto;
+  font-size: 1.5em;
+  margin: 0;
   text-align: center;
   color: #fff;
   text-shadow: 3px 4px 0 #000;

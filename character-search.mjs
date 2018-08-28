@@ -2,6 +2,11 @@ import { Component } from "//unpkg.com/can@5/core.mjs";
 
 const styles = document.createElement("style");
 styles.innerHTML = `
+character-search-page {
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+}
 character-search-page input {
   display: flex;
   text-align: center;
@@ -33,7 +38,7 @@ export default Component.extend({
 	tag: "character-search-page",
 
 	view: `
-	<input type="text" value:bind="query">
+	<input type="text" value:bind="query" placeholder="Character Name" autofocus>
 	<a href="{{ routeUrl(page="list" query=query)}}">Search</a>
   `,
 
