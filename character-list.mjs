@@ -102,7 +102,7 @@ export default Component.extend({
         <ul>
         {{# each(characters, character=value) }}
           <li>
-            <a href="{{ routeUrl( page="details" characterId=character.id, true ) }}">
+            <a href="{{ routeUrl( page="details" query=scope.vm.query characterId=character.id) }}">
               <img src="{{character.image}}" alt="{{character.name}}" />
               <p>{{character.name}}</p>
             </a>
