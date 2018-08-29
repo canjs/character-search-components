@@ -1,4 +1,6 @@
-import { Component } from "//unpkg.com/can@5/ecosystem.mjs";
+import { Component, domEvents, enterEvent, Reflect, route } from "//unpkg.com/can@5/ecosystem.mjs";
+
+domEvents.addEvent(enterEvent);
 
 const styles = document.createElement("style");
 styles.innerHTML = `
@@ -42,7 +44,7 @@ export default Component.extend({
 	tag: "character-search-page",
 
 	view: `
-	<input type="text" on:input="enableHref(scope.element.value)" value:bind="query" placeholder="Character Name" autofocus>
+	<input type="text" on:enter="navigate(scope.element.value)" on:input="enableHref(scope.element.value)" value:bind="query" placeholder="Character Name" autofocus>
 	<a {{# if(hrefEnabled) }}href="{{ routeUrl(page="list" query=query)}}"{{/ if }} {{# unless(hrefEnabled) }}disabled{{/ unless }}>Search</a>
   `,
 
@@ -61,6 +63,14 @@ export default Component.extend({
 		},
 		enableHref(val) {
 			this.hrefEnabled = val.length > 0;
+		},
+		navigate(query) {
+			if (query.length) {
+				Reflect.update(route.data, {
+					page: "list",
+					query: query
+				});
+			}
 		}
 	}
 });
