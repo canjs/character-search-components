@@ -23,7 +23,7 @@ character-list-page .pagination button {
   color: #fef979;
   background-color: #00a1b7;
   border-radius: 6px;
-  font-size: 30px;
+  font-size: 1.2em;
   vertical-align: middle;
   text-shadow: 2px 2px 0 #000;
 }
@@ -51,10 +51,10 @@ character-list-page li {
   background-color: #00a1b7;
   border-radius: 10px;
   margin: 20px;
-  padding: 25px 25px 0 25px;
+  padding: 10px 10px 0 10px;
   list-style: none;
   display: flex;
-  width: 210px;
+  width: 150px;
 }
 character-list-page li:hover {
   background-color: #0097ac;
@@ -64,12 +64,12 @@ character-list-page li a {
   letter-spacing: 3px;
 }
 character-list-page li img {
-  width: 100%;
+  width: 150px;
   height: inherit;
   border-radius: 10px;
 }
 character-list-page li p {
-  font-size: 26px;
+  font-size: 1.2em;
   padding: 10px;
   margin: 0 auto 15px auto;
   text-align: center;
@@ -87,9 +87,8 @@ export default Component.extend({
         <a href="{{ routeUrl(page="search" query=query) }}" class="search">&lt; Search</a>
       </div>
       <div class="pagination">
-        <button on:click="goBack()" {{# unless(canGoBack) }}disabled{{/ unless }}>&lt; </button>
-        <span>Results {{startIndex}} - {{endIndex}} of {{characterCount}}</span>
-        <button on:click="goForward()" {{# unless(canGoForward) }}disabled{{/ unless }}>&gt;</button>
+        <button on:click="goBack()" {{# unless(canGoBack) }}disabled{{/ unless }}>Last</button>
+        <button on:click="goForward()" {{# unless(canGoForward) }}disabled{{/ unless }}>Next</button>
       </div>
     </div>
 

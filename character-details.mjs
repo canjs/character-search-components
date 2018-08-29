@@ -6,6 +6,7 @@ character-details-page {
   margin: 0 3em;
 }
 character-details-page .character-details {
+  max-width: 400px;
   margin: 1em 3em;
   text-align: center;
   background-color: #00a1b7;
@@ -13,8 +14,8 @@ character-details-page .character-details {
   border-radius: 10px;
 }
 character-details-page .character-details img {
-  width: 400px;
-  height: 400px;
+  max-width: 100%;
+  height: auto;
   border: 10px solid #fff;
   border-radius: 6px;
 }

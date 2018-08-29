@@ -3,7 +3,6 @@ body {
   font-family: 'Permanent Marker', cursive;
   background-color: #00b0c8;
   color: #000;
-  font-size: 2em;
   margin: 0;
   padding: 0;
 }
@@ -42,5 +41,6 @@ a {
   margin: -2em 0 1em 0;
 }
 character-search-app {
-  margin: 1em 3em;
+  display: block;
+  padding-top: 12px;
 }
