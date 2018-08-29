@@ -39,8 +39,7 @@ a {
 .header {
   text-align: center;
   background-color: #000;
-  margin: -1.45em 0 1em 0;
-  padding: 1em;
+  margin: -2em 0 1em 0;
 }
 character-search-app {
   margin: 1em 3em;

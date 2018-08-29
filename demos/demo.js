@@ -5,7 +5,7 @@ Component.extend({
 
   view: `
     <div class="header">
-      <img src="https://image.ibb.co/nzProU/rick_morty.png" width="400" height="151">
+      <img src="https://image.ibb.co/nzProU/rick_morty.png" width="300" height="113">
     </div>
 
     {{# if(routeComponent.isPending) }}
