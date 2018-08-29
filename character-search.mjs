@@ -42,11 +42,25 @@ export default Component.extend({
 	tag: "character-search-page",
 
 	view: `
-	<input type="text" on:input:value:to="query" value:from="query" placeholder="Character Name" autofocus>
-	<a {{# if(query) }}href="{{ routeUrl(page="list" query=query)}}"{{/ if }} {{# unless(query) }}disabled{{/ unless }}>Search</a>
+	<input type="text" on:input="enableHref(scope.element.value)" value:bind="query" placeholder="Character Name" autofocus>
+	<a {{# if(hrefEnabled) }}href="{{ routeUrl(page="list" query=query)}}"{{/ if }} {{# unless(hrefEnabled) }}disabled{{/ unless }}>Search</a>
   `,
 
 	ViewModel: {
-		query: "string"
+		query: "string",
+		hrefEnabled: {
+			value({ resolve, lastSet, listenTo }) {
+				listenTo(lastSet, resolve);
+
+				listenTo("query", (ev, query) => {
+					resolve(query.length > 0);
+				});
+
+				resolve(this.query.length > 0);
+			}
+		},
+		enableHref(val) {
+			this.hrefEnabled = val.length > 0;
+		}
 	}
 });
