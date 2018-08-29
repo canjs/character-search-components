@@ -31,6 +31,10 @@ character-search-page a {
 character-search-page a:hover {
   color: #fff;
 }
+character-search-page a[disabled] {
+  pointer-events: none;
+  color: #aaa;;
+}
 `;
 document.body.appendChild(styles);
 
@@ -38,8 +42,8 @@ export default Component.extend({
 	tag: "character-search-page",
 
 	view: `
-	<input type="text" value:bind="query" placeholder="Character Name" autofocus>
-	<a href="{{ routeUrl(page="list" query=query)}}">Search</a>
+	<input type="text" on:input:value:to="query" value:from="query" placeholder="Character Name" autofocus>
+	<a {{# if(query) }}href="{{ routeUrl(page="list" query=query)}}"{{/ if }} {{# unless(query) }}disabled{{/ unless }}>Search</a>
   `,
 
 	ViewModel: {
