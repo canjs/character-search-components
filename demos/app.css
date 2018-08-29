@@ -45,11 +45,3 @@ a {
 character-search-app {
   margin: 1em 3em;
 }
-character-search-app h1 {
-  font-size: 1.5em;
-  margin: 0;
-  text-align: center;
-  color: #fff;
-  text-shadow: 3px 4px 0 #000;
-  letter-spacing: 8px;
-}
