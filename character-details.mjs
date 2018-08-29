@@ -1,4 +1,4 @@
-import { Component } from "//unpkg.com/can@5/core.mjs";
+import { Component } from "//unpkg.com/can@5/ecosystem.mjs";
 
 const styles = document.createElement("style");
 styles.innerHTML = `

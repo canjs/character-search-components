@@ -1,4 +1,4 @@
-import { Component, observe, route, value } from "//unpkg.com/can@5.6.0/ecosystem.mjs";
+import { Component, observe, route, value } from "//unpkg.com/can@5/ecosystem.mjs";
 
 Component.extend({
   tag: "character-search-app",
