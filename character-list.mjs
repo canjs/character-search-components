@@ -91,20 +91,20 @@ export default class CharacterListPage extends StacheElement {
 		</div>
 
 		<div class="wrapper">
-			{{# if(charactersPromise.isPending) }}
+			{{# if(this.charactersPromise.isPending) }}
 				<div class="loading">Loading...</div>
 			{{/ if }}
 
-			{{# if(charactersPromise.isResolved) }}
+			{{# if(this.charactersPromise.isResolved) }}
 				<ul>
-				{{# each(characters, character=value) }}
+				{{# for(character of this.characters) }}
 					<li>
-						<a href="{{ routeUrl( page="details" query=../query characterId=character.id) }}">
+						<a href="{{ routeUrl( page="details" query=this.query characterId=character.id) }}">
 							<img src="{{character.image}}" alt="{{character.name}}" />
 							<p>{{character.name}}</p>
 						</a>
 					</li>
-				{{/ each }}
+				{{/ for }}
 				</ul>
 			{{/ if }}
 		</div>

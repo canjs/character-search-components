@@ -42,7 +42,7 @@ export default class CharacterDetailsPage extends StacheElement {
 	static view = `
 		<div class="breadcrumbs">
 			<div>
-				<a href="{{ routeUrl(page="list" query=query)}}" class="search">&lt; Characters</a>
+				<a href="{{ routeUrl(page="list" query=this.query)}}" class="search">&lt; Characters</a>
 			</div>
 		</div>
 
@@ -53,12 +53,12 @@ export default class CharacterDetailsPage extends StacheElement {
 		{{# if(characterPromise.isResolved) }}
 			<div class="character-details">
 				{{# with(characterPromise.value) }}
-					<h2>{{name}}</h2>
-					<img src="{{image}}" alt="{{name}}"/>
-					<p><span>Status:</span> {{status}}</p>
-					<p><span>Species:</span> {{species}}</p>
-					<p><span>Location:</span> {{location.name}}</p>
-					<p><span>Type:</span> {{# if(type) }}{{type}}{{ else }}Unknown{{/ if }}</p>
+					<h2>{{this.name}}</h2>
+					<img src="{{this.image}}" alt="{{this.name}}"/>
+					<p><span>Status:</span> {{this.status}}</p>
+					<p><span>Species:</span> {{this.species}}</p>
+					<p><span>Location:</span> {{this.location.name}}</p>
+					<p><span>Type:</span> {{# if(this.type) }}{{this.type}}{{ else }}Unknown{{/ if }}</p>
 				{{/ with }}
 			</div>
 		{{/ if }}
