@@ -1,4 +1,11 @@
-import { Component, domEvents, enterEvent, Reflect, route } from "//unpkg.com/can@5/ecosystem.mjs";
+import {
+	domEvents,
+	enterEvent,
+	Reflect,
+	route,
+	StacheElement,
+	type
+} from "//unpkg.com/can@pre/ecosystem.mjs";
 
 domEvents.addEvent(enterEvent);
 
@@ -40,16 +47,15 @@ character-search-page a[disabled] {
 `;
 document.body.appendChild(styles);
 
-export default Component.extend({
-	tag: "character-search-page",
+export default class CharacterSearchPage extends StacheElement {
+	static view = `
+		<input type="text" on:enter="navigate(scope.element.value)" on:input="enableHref(scope.element.value)" value:bind="query" placeholder="Character Name" autofocus>
+		<a {{# if(hrefEnabled) }}href="{{ routeUrl(page="list" query=query)}}"{{/ if }} {{# unless(hrefEnabled) }}disabled{{/ unless }}>Search</a>
+	`;
 
-	view: `
-	<input type="text" on:enter="navigate(scope.element.value)" on:input="enableHref(scope.element.value)" value:bind="query" placeholder="Character Name" autofocus>
-	<a {{# if(hrefEnabled) }}href="{{ routeUrl(page="list" query=query)}}"{{/ if }} {{# unless(hrefEnabled) }}disabled{{/ unless }}>Search</a>
-  `,
+	static props = {
+		query: type.maybeConvert(String),
 
-	ViewModel: {
-		query: "string",
 		hrefEnabled: {
 			value({ resolve, lastSet, listenTo }) {
 				listenTo(lastSet, resolve);
@@ -60,17 +66,21 @@ export default Component.extend({
 
 				resolve(this.query.length > 0);
 			}
-		},
-		enableHref(val) {
-			this.hrefEnabled = val.length > 0;
-		},
-		navigate(query) {
-			if (query.length) {
-				Reflect.update(route.data, {
-					page: "list",
-					query: query
-				});
-			}
+		}
+	};
+
+	enableHref(val) {
+		this.hrefEnabled = val.length > 0;
+	}
+
+	navigate(query) {
+		if (query.length) {
+			Reflect.update(route.data, {
+				page: "list",
+				query: query
+			});
 		}
 	}
-});
+}
+
+customElements.define("character-search-page", CharacterSearchPage);
