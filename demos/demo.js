@@ -11,12 +11,12 @@ class CharacterSearchApp extends StacheElement {
 			<img src="https://image.ibb.co/nzProU/rick_morty.png" width="300" height="113">
 		</div>
 
-		{{# if(routeComponent.isPending) }}
+		{{# if(this.routeComponent.isPending) }}
 			Loading...
 		{{/ if }}
 
-		{{# if(routeComponent.isResolved) }}
-			{{ routeComponent.value }}
+		{{# if(this.routeComponent.isResolved) }}
+			{{ this.routeComponent.value }}
 		{{/ if }}
 	`;
 

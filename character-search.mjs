@@ -3,8 +3,7 @@ import {
 	enterEvent,
 	Reflect,
 	route,
-	StacheElement,
-	type
+	StacheElement
 } from "//unpkg.com/can@pre/ecosystem.mjs";
 
 domEvents.addEvent(enterEvent);
@@ -49,12 +48,12 @@ document.body.appendChild(styles);
 
 export default class CharacterSearchPage extends StacheElement {
 	static view = `
-		<input type="text" on:enter="navigate(scope.element.value)" on:input="enableHref(scope.element.value)" value:bind="query" placeholder="Character Name" autofocus>
-		<a {{# if(hrefEnabled) }}href="{{ routeUrl(page="list" query=query)}}"{{/ if }} {{# unless(hrefEnabled) }}disabled{{/ unless }}>Search</a>
+		<input type="text" on:enter="this.navigate(scope.element.value)" on:input="this.enableHref(scope.element.value)" value:bind="this.query" placeholder="Character Name" autofocus>
+		<a {{# if(this.hrefEnabled) }}href="{{ routeUrl(page="list" query=this.query)}}"{{/ if }} {{# unless(this.hrefEnabled) }}disabled{{/ unless }}>Search</a>
 	`;
 
 	static props = {
-		query: type.maybeConvert(String),
+		query: String,
 
 		hrefEnabled: {
 			value({ resolve, lastSet, listenTo }) {

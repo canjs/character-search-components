@@ -42,17 +42,17 @@ export default class CharacterDetailsPage extends StacheElement {
 	static view = `
 		<div class="breadcrumbs">
 			<div>
-				<a href="{{ routeUrl(page="list" query=this.query)}}" class="search">&lt; Characters</a>
+				<a href="{{ routeUrl(page="list" query=this.query) }}" class="search">&lt; Characters</a>
 			</div>
 		</div>
 
-		{{# if(characterPromise.isPending) }}
+		{{# if(this.characterPromise.isPending) }}
 			<div class="loading">Loading...</div>
 		{{/ if }}
 
-		{{# if(characterPromise.isResolved) }}
+		{{# if(this.characterPromise.isResolved) }}
 			<div class="character-details">
-				{{# with(characterPromise.value) }}
+				{{# with(this.characterPromise.value) }}
 					<h2>{{this.name}}</h2>
 					<img src="{{this.image}}" alt="{{this.name}}"/>
 					<p><span>Status:</span> {{this.status}}</p>
@@ -65,8 +65,8 @@ export default class CharacterDetailsPage extends StacheElement {
 	`;
 
 	static props = {
-		query: type.maybeConvert(String),
-		id: type.maybeConvert(Number),
+		query: String,
+		id: type.convert(Number),
 
 		get characterPromise() {
 			return fetch(`https://rickandmortyapi.com/api/character/${this.id}`).then(

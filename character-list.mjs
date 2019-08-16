@@ -1,4 +1,4 @@
-import { StacheElement, type } from "//unpkg.com/can@pre/ecosystem.mjs";
+import { StacheElement } from "//unpkg.com/can@pre/ecosystem.mjs";
 
 const styles = document.createElement("style");
 styles.innerHTML = `
@@ -82,11 +82,11 @@ export default class CharacterListPage extends StacheElement {
 	static view = `
 		<div class="breadcrumbs">
 			<div>
-				<a href="{{ routeUrl(page="search" query=query) }}" class="search">&lt; Search</a>
+				<a href="{{ routeUrl(page="search" query=this.query) }}" class="search">&lt; Search</a>
 			</div>
 			<div class="pagination">
-				<button on:click="goBack()" {{# unless(canGoBack) }}disabled{{/ unless }}>Last</button>
-				<button on:click="goForward()" {{# unless(canGoForward) }}disabled{{/ unless }}>Next</button>
+				<button on:click="this.goBack()" {{# unless(this.canGoBack) }}disabled{{/ unless }}>Last</button>
+				<button on:click="this.goForward()" {{# unless(this.canGoForward) }}disabled{{/ unless }}>Next</button>
 			</div>
 		</div>
 
@@ -111,8 +111,8 @@ export default class CharacterListPage extends StacheElement {
 	`;
 
 	static props = {
-		query: type.maybeConvert(String),
-		page: { type: type.maybeConvert(Number), default: 1 },
+		query: String,
+		page: { type: Number, default: 1 },
 
 		get canGoBack() {
 			return this.startIndex > 1;
@@ -142,13 +142,13 @@ export default class CharacterListPage extends StacheElement {
 		},
 
 		characters: {
-			async(resolve, lastSet) {
+			async(resolve) {
 				this.charactersPromise.then(data => resolve(data.results));
 			}
 		},
 
 		characterCount: {
-			async(resolve, lastSet) {
+			async(resolve) {
 				this.charactersPromise.then(data => resolve(data.info.count));
 			}
 		}
