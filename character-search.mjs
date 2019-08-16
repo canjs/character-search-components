@@ -3,7 +3,8 @@ import {
 	enterEvent,
 	Reflect,
 	route,
-	StacheElement
+	StacheElement,
+	type
 } from "//unpkg.com/can@pre/ecosystem.mjs";
 
 domEvents.addEvent(enterEvent);
@@ -53,7 +54,7 @@ export default class CharacterSearchPage extends StacheElement {
 	`;
 
 	static props = {
-		query: String,
+		query: type.maybeConvert(String),
 
 		hrefEnabled: {
 			value({ resolve, lastSet, listenTo }) {
