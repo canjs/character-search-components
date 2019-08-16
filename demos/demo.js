@@ -1,67 +1,68 @@
-import { Component, observe, route, value } from "//unpkg.com/can@5/ecosystem.mjs";
+import {
+	ObservableObject,
+	route,
+	StacheElement,
+	value
+} from "//unpkg.com/can@pre/ecosystem.mjs";
 
-Component.extend({
-  tag: "character-search-app",
+class CharacterSearchApp extends StacheElement {
+	static view = `
+		<div class="header">
+			<img src="https://image.ibb.co/nzProU/rick_morty.png" width="300" height="113">
+		</div>
 
-  view: `
-    <div class="header">
-      <img src="https://image.ibb.co/nzProU/rick_morty.png" width="300" height="113">
-    </div>
+		{{# if(this.routeComponent.isPending) }}
+			Loading...
+		{{/ if }}
 
-    {{# if(routeComponent.isPending) }}
-      Loading...
-    {{/ if }}
+		{{# if(this.routeComponent.isResolved) }}
+			{{ this.routeComponent.value }}
+		{{/ if }}
+	`;
 
-    {{# if(routeComponent.isResolved) }}
-      {{ routeComponent.value }}
-    {{/ if }}
-  `,
+	static props = {
+		routeData: {
+			get default() {
+				const routeData = new ObservableObject({});
+				route.data = routeData;
 
-  ViewModel: {
-    routeData: {
-      default() {
-        const routeData = new observe.Object({});
-        route.data = routeData;
+				route.register("", { page: "search" });
+				route.register("{page}");
+				route.register("{page}/{query}");
+				route.register("{page}/{query}/{characterId}");
 
-        route.register("", { page: "search" });
-        route.register("{page}");
-        route.register("{page}/{query}");
-        route.register("{page}/{query}/{characterId}");
+				route.start();
 
-        route.start();
+				return routeData;
+			}
+		},
 
-        return routeData;
-      }
-    },
+		get routeComponentData() {
+			switch (this.routeData.page) {
+				case "search":
+				case "list":
+					return {
+						query: value.from(this.routeData, "query")
+					};
 
-    get routeComponentData() {
-      switch(this.routeData.page) {
-        case "search":
-          return {
-            query: value.from(this.routeData, "query")
-          };
-        case "list":
-          return {
-            query: value.from(this.routeData, "query")
-          };
-        case "details":
-          return {
-            query: value.from(this.routeData, "query"),
-            id: value.from(this.routeData, "characterId")
-          };
-      }
-    },
+				case "details":
+					return {
+						query: value.from(this.routeData, "query"),
+						id: value.from(this.routeData, "characterId")
+					};
+			}
+		},
 
-    get routeComponent() {
-      const componentURL = `../character-${this.routeData.page}.mjs`;
+		get routeComponent() {
+			const componentURL = `../character-${this.routeData.page}.mjs`;
 
-      return import(componentURL).then((module) => {
-        const ComponentConstructor = module.default;
+			return import(componentURL).then(module => {
+				const ComponentConstructor = module.default;
 
-        return new ComponentConstructor({
-          viewModel: this.routeComponentData
-        });
-      });
-    }
-  }
-});
+				return new ComponentConstructor().bindings(this.routeComponentData);
+			});
+		}
+	};
+}
+
+customElements.define("character-search-app", CharacterSearchApp);

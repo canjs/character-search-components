@@ -1,4 +1,4 @@
-import { Component } from "//unpkg.com/can@5/ecosystem.mjs";
+import { StacheElement, type } from "//unpkg.com/can@pre/ecosystem.mjs";
 
 const styles = document.createElement("style");
 styles.innerHTML = `
@@ -38,41 +38,42 @@ character-details-page .character-details p span {
 `;
 document.body.appendChild(styles);
 
-export default Component.extend({
-  tag: "character-details-page",
+export default class CharacterDetailsPage extends StacheElement {
+	static view = `
+		<div class="breadcrumbs">
+			<div>
+				<a href="{{ routeUrl(page="list" query=this.query) }}" class="search">&lt; Characters</a>
+			</div>
+		</div>
 
-  view: `
-    <div class="breadcrumbs">
-      <div>
-        <a href="{{ routeUrl(page="list" query=query)}}" class="search">&lt; Characters</a>
-      </div>
-    </div>
+		{{# if(this.characterPromise.isPending) }}
+			<div class="loading">Loading...</div>
+		{{/ if }}
 
-    {{# if(characterPromise.isPending) }}
-      <div class="loading">Loading...</div>
-    {{/ if }}
+		{{# if(this.characterPromise.isResolved) }}
+			<div class="character-details">
+				{{# with(this.characterPromise.value) }}
+					<h2>{{this.name}}</h2>
+					<img src="{{this.image}}" alt="{{this.name}}"/>
+					<p><span>Status:</span> {{this.status}}</p>
+					<p><span>Species:</span> {{this.species}}</p>
+					<p><span>Location:</span> {{this.location.name}}</p>
+					<p><span>Type:</span> {{# if(this.type) }}{{this.type}}{{ else }}Unknown{{/ if }}</p>
+				{{/ with }}
+			</div>
+		{{/ if }}
+	`;
 
-    {{# if(characterPromise.isResolved) }}
-      <div class="character-details">
-        {{# with(characterPromise.value) }}
-          <h2>{{name}}</h2>
-          <img src="{{image}}" alt="{{name}}"/>
-          <p><span>Status:</span> {{status}}</p>
-          <p><span>Species:</span> {{species}}</p>
-          <p><span>Location:</span> {{location.name}}</p>
-          <p><span>Type:</span> {{# if(type) }}{{type}}{{ else }}Unknown{{/ if }}</p>
-        {{/ with }}
-      </div>
-    {{/ if }}
-  `,
+	static props = {
+		query: String,
+		id: type.convert(Number),
 
-  ViewModel: {
-    query: "string",
-    id: "number",
+		get characterPromise() {
+			return fetch(`https://rickandmortyapi.com/api/character/${this.id}`).then(
+				resp => resp.json()
+			);
+		}
+	};
+}
 
-    get characterPromise() {
-      return fetch(`https://rickandmortyapi.com/api/character/${this.id}`)
-        .then(resp => resp.json());
-    }
-  }
-});
+customElements.define("character-details-page", CharacterDetailsPage);

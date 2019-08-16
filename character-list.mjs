@@ -1,4 +1,4 @@
-import { Component } from "//unpkg.com/can@5/ecosystem.mjs";
+import { StacheElement } from "//unpkg.com/can@pre/ecosystem.mjs";
 
 const styles = document.createElement("style");
 styles.innerHTML = `
@@ -78,86 +78,89 @@ character-list-page li p {
 `;
 document.body.appendChild(styles);
 
-export default Component.extend({
-  tag: "character-list-page",
+export default class CharacterListPage extends StacheElement {
+	static view = `
+		<div class="breadcrumbs">
+			<div>
+				<a href="{{ routeUrl(page="search" query=this.query) }}" class="search">&lt; Search</a>
+			</div>
+			<div class="pagination">
+				<button on:click="this.goBack()" {{# unless(this.canGoBack) }}disabled{{/ unless }}>Last</button>
+				<button on:click="this.goForward()" {{# unless(this.canGoForward) }}disabled{{/ unless }}>Next</button>
+			</div>
+		</div>
 
-  view: `
-    <div class="breadcrumbs">
-      <div>
-        <a href="{{ routeUrl(page="search" query=query) }}" class="search">&lt; Search</a>
-      </div>
-      <div class="pagination">
-        <button on:click="goBack()" {{# unless(canGoBack) }}disabled{{/ unless }}>Last</button>
-        <button on:click="goForward()" {{# unless(canGoForward) }}disabled{{/ unless }}>Next</button>
-      </div>
-    </div>
+		<div class="wrapper">
+			{{# if(this.charactersPromise.isPending) }}
+				<div class="loading">Loading...</div>
+			{{/ if }}
 
-    <div class="wrapper">
-      {{# if(charactersPromise.isPending) }}
-        <div class="loading">Loading...</div>
-      {{/ if }}
+			{{# if(this.charactersPromise.isResolved) }}
+				<ul>
+				{{# for(character of this.characters) }}
+					<li>
+						<a href="{{ routeUrl( page="details" query=this.query characterId=character.id) }}">
+							<img src="{{character.image}}" alt="{{character.name}}" />
+							<p>{{character.name}}</p>
+						</a>
+					</li>
+				{{/ for }}
+				</ul>
+			{{/ if }}
+		</div>
+	`;
 
-      {{# if(charactersPromise.isResolved) }}
-        <ul>
-        {{# each(characters, character=value) }}
-          <li>
-            <a href="{{ routeUrl( page="details" query=scope.vm.query characterId=character.id) }}">
-              <img src="{{character.image}}" alt="{{character.name}}" />
-              <p>{{character.name}}</p>
-            </a>
-          </li>
-        {{/ each }}
-        </ul>
-      {{/ if }}
-    </div>
-  `,
+	static props = {
+		query: String,
+		page: { type: Number, default: 1 },
 
-  ViewModel: {
-    query: "string",
+		get canGoBack() {
+			return this.startIndex > 1;
+		},
 
-    page: { type: "number", default: 1 },
+		get canGoForward() {
+			return this.endIndex < this.characterCount;
+		},
 
-    get canGoBack() {
-      return this.startIndex > 1;
-    },
+		get startIndex() {
+			return (this.page - 1) * 20 + 1;
+		},
 
-    goBack() {
-      this.page--;
-    },
+		get endIndex() {
+			let index = this.page * 20;
+			return index < this.characterCount ? index : this.characterCount;
+		},
 
-    get canGoForward() {
-      return this.endIndex < this.characterCount;
-    },
+		get charactersPromise() {
+			return fetch(
+				`https://rickandmortyapi.com/api/character?name=${this.query}&page=${
+					this.page
+				}`
+			)
+				.then(resp => resp.json())
+				.catch(err => []);
+		},
 
-    goForward() {
-      this.page++;
-    },
+		characters: {
+			async(resolve) {
+				this.charactersPromise.then(data => resolve(data.results));
+			}
+		},
 
-    get startIndex() {
-      return (this.page - 1) * 20 + 1;
-    },
+		characterCount: {
+			async(resolve) {
+				this.charactersPromise.then(data => resolve(data.info.count));
+			}
+		}
+	};
 
-    get endIndex() {
-      let index = this.page * 20;
-      return index < this.characterCount ? index : this.characterCount;
-    },
+	goBack() {
+		this.page--;
+	}
 
-    get charactersPromise() {
-      return fetch(`https://rickandmortyapi.com/api/character?name=${this.query}&page=${this.page}`)
-        .then(resp => resp.json())
-        .catch(err => ([]));
-    },
+	goForward() {
+		this.page++;
+	}
+}
 
-    characters: {
-      get(lastSet, resolve) {
-        this.charactersPromise.then(data => resolve(data.results));
-      }
-    },
-
-    characterCount: {
-      get(lastSet, resolve) {
-        this.charactersPromise.then(data => resolve(data.info.count));
-      }
-    }
-  }
-});
+customElements.define("character-list-page", CharacterListPage);
